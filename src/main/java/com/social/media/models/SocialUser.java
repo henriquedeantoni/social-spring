@@ -17,7 +17,7 @@ public class SocialUser {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy="user")
+    @OneToOne(mappedBy="user", cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE})
     private SocialProfile socialProfile;
 
     @OneToMany(mappedBy = "socialUser")
@@ -30,6 +30,11 @@ public class SocialUser {
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
     private Set<SocialGroup> groups = new HashSet<>();
+
+    public void setSocialProfile(SocialProfile socialProfile){
+        socialProfile.setUser(this);
+        this.socialProfile = socialProfile;
+    }
 
     @Override
     public int hashCode() {
